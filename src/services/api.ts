@@ -13,3 +13,13 @@ export const fetchMovies = async (query: string = 'batman'): Promise<OMDBRespons
         throw error;
     }
 };
+
+export const fetchMovieDetails = async (id: string) => {
+    try {
+        const response = await axios.get(`${BASE_URL}?apikey=${API_KEY}&i=${id}&plot=full`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching movie details:', error);
+        throw error;
+    }
+};
