@@ -12,6 +12,10 @@ const Dashboard: React.FC = () => {
     const [actionMovies, setActionMovies] = useState<Movie[]>([]);
     const [horrorMovies, setHorrorMovies] = useState<Movie[]>([]);
     const [comedyMovies, setComedyMovies] = useState<Movie[]>([]);
+    const [hindiMovies, setHindiMovies] = useState<Movie[]>([]);
+    const [koreanMovies, setKoreanMovies] = useState<Movie[]>([]);
+    const [animeMovies, setAnimeMovies] = useState<Movie[]>([]);
+    const [documentaries, setDocumentaries] = useState<Movie[]>([]);
     const [heroMovie, setHeroMovie] = useState<Movie | null>(null);
 
     const [searchResults, setSearchResults] = useState<Movie[]>([]);
@@ -38,11 +42,15 @@ const Dashboard: React.FC = () => {
     const initDashboard = async () => {
         try {
             setLoading(true);
-            const [trend, act, horror, comedy] = await Promise.all([
+            const [trend, act, horror, comedy, hindi, korean, anime, docs] = await Promise.all([
                 fetchMovies('marvel'),
                 fetchMovies('action'),
                 fetchMovies('horror'),
-                fetchMovies('comedy')
+                fetchMovies('comedy'),
+                fetchMovies('hindi'),
+                fetchMovies('korean'),
+                fetchMovies('anime'),
+                fetchMovies('documentary')
             ]);
 
             if (trend.Search) {
@@ -52,6 +60,10 @@ const Dashboard: React.FC = () => {
             if (act.Search) setActionMovies(act.Search);
             if (horror.Search) setHorrorMovies(horror.Search);
             if (comedy.Search) setComedyMovies(comedy.Search);
+            if (hindi.Search) setHindiMovies(hindi.Search);
+            if (korean.Search) setKoreanMovies(korean.Search);
+            if (anime.Search) setAnimeMovies(anime.Search);
+            if (docs.Search) setDocumentaries(docs.Search);
 
             setError(null);
         } catch (err) {
@@ -284,9 +296,13 @@ const Dashboard: React.FC = () => {
                     ) : (
                         <>
                             <MovieRow title="Trending Now" moviesList={trending} />
+                            <MovieRow title="Bollywood Hits (Hindi)" moviesList={hindiMovies} />
+                            <MovieRow title="K-Drama Wave (Korean)" moviesList={koreanMovies} />
                             <MovieRow title="Action Blockbusters" moviesList={actionMovies} />
+                            <MovieRow title="Anime Essentials" moviesList={animeMovies} />
                             <MovieRow title="Hair-Raising Horror" moviesList={horrorMovies} />
                             <MovieRow title="Laugh-Out-Loud Comedies" moviesList={comedyMovies} />
+                            <MovieRow title="Thought-Provoking Documentaries" moviesList={documentaries} />
                         </>
                     )}
                 </main>
