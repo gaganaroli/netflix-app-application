@@ -139,8 +139,22 @@ const Dashboard: React.FC = () => {
                                 className={`label-nav cursor-pointer transition-all duration-300 ${activeTab === tab ? 'text-white font-bold' : 'text-gray-400 hover:text-gray-200'}`}
                                 onClick={() => {
                                     setActiveTab(tab);
-                                    if (tab === 'Home') setSearchResults([]);
-                                    else loadSearchResults(tab);
+                                    if (tab === 'Home') {
+                                        setSearchQuery('');
+                                        setSearchResults([]);
+                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    } else {
+                                        // Map nav titles to specific OMDb search terms
+                                        const searchMap: { [key: string]: string } = {
+                                            'TV Shows': 'series',
+                                            'Movies': 'movie',
+                                            'New & Popular': '2024',
+                                            'My List': 'star wars' // Example featured list
+                                        };
+                                        const query = searchMap[tab] || tab;
+                                        setSearchQuery(tab); // Set UI search title
+                                        loadSearchResults(query);
+                                    }
                                 }}
                             >
                                 {tab}
