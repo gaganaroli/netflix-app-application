@@ -14,6 +14,15 @@ const Dashboard: React.FC = () => {
     const [activeTab, setActiveTab] = useState('Home');
     const [isScrolled, setIsScrolled] = useState(false);
 
+    const handlePlay = (title: string) => {
+        const query = encodeURIComponent(`${title} official trailer`);
+        window.open(`https://www.youtube.com/results?search_query=${query}`, '_blank');
+    };
+
+    const handleInfo = (movie: Movie) => {
+        alert(`${movie.Title} (${movie.Year})\nType: ${movie.Type}\nIMDb ID: ${movie.imdbID}\n\nFetching more details from OMDb...`);
+    };
+
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 0) {
@@ -179,13 +188,13 @@ const Dashboard: React.FC = () => {
                     <div className="flex gap-4">
                         <button
                             className="bg-white text-black px-8 py-3 rounded font-bold flex items-center gap-2 hover:bg-white/90 transition active:scale-95"
-                            onClick={() => alert('Starting playback...')}
+                            onClick={() => handlePlay('Batman')}
                         >
                             <Play fill="black" size={24} /> Play
                         </button>
                         <button
                             className="bg-gray-500/50 text-white px-8 py-3 rounded font-bold flex items-center gap-2 hover:bg-gray-500/70 transition backdrop-blur-md active:scale-95"
-                            onClick={() => alert('Batman: The shadowy protector of Gotham City faces his greatest challenge yet.')}
+                            onClick={() => alert('Batman (2022): The shadowy protector of Gotham City faces his greatest challenge yet.')}
                         >
                             <Info size={24} /> More Info
                         </button>
@@ -209,7 +218,12 @@ const Dashboard: React.FC = () => {
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-8">
                     {!loading && movies.map((movie) => (
-                        <MovieCard key={movie.imdbID} movie={movie} />
+                        <MovieCard
+                            key={movie.imdbID}
+                            movie={movie}
+                            onPlay={() => handlePlay(movie.Title)}
+                            onInfo={() => handleInfo(movie)}
+                        />
                     ))}
                 </div>
 

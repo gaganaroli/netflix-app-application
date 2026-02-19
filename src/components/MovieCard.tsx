@@ -4,11 +4,16 @@ import { Play, Plus, Info } from 'lucide-react';
 
 interface MovieCardProps {
     movie: Movie;
+    onPlay?: (title: string) => void;
+    onInfo?: (movie: Movie) => void;
 }
 
-const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
+const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlay, onInfo }) => {
     return (
-        <div className="group relative bg-[#141414] rounded-md overflow-hidden transition-all duration-300 hover:scale-110 hover:z-10 shadow-lg cursor-pointer">
+        <div
+            className="group relative bg-[#141414] rounded-md overflow-hidden transition-all duration-300 hover:scale-110 hover:z-10 shadow-lg cursor-pointer"
+            onClick={() => onInfo && onInfo(movie)}
+        >
             <div className="aspect-[2/3] w-full relative">
                 <img
                     src={movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/300x450?text=No+Poster'}
@@ -29,19 +34,28 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
                 <div className="flex gap-2 mt-3">
                     <button
                         className="bg-white text-black rounded-full p-1.5 hover:bg-white/80 transition shadow-md active:scale-90"
-                        onClick={(e) => { e.stopPropagation(); alert(`Playing: ${movie.Title}`); }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (onPlay) onPlay(movie.Title);
+                        }}
                     >
                         <Play fill="black" size={14} />
                     </button>
                     <button
                         className="border-2 border-gray-500 text-white rounded-full p-1.5 hover:border-white transition shadow-md active:scale-90"
-                        onClick={(e) => { e.stopPropagation(); alert(`Added ${movie.Title} to My List`); }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            alert(`Added ${movie.Title} to My List`);
+                        }}
                     >
                         <Plus size={14} />
                     </button>
                     <button
                         className="border-2 border-gray-500 text-white rounded-full p-1.5 hover:border-white transition shadow-md ml-auto active:scale-90"
-                        onClick={(e) => { e.stopPropagation(); alert(`Information about ${movie.Title} (${movie.Year})`); }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (onInfo) onInfo(movie);
+                        }}
                     >
                         <Info size={14} />
                     </button>
